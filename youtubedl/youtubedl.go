@@ -174,7 +174,7 @@ func parallel(count int, procs int, fn func(int, int)) {
 	} else {
 		blockSize = 1
 	}
-	if blockSize == 0 {
+	if blockSize <= 0 {
 		blockSize = 1
 	}
 
