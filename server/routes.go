@@ -60,12 +60,12 @@ func queryVideos(db *gorm.DB, query string, limit int, page int) ([]models.Video
 
 	exquery, tags, keys := util.ParseTags(query)
 
-	raw := "SELECT * FROM videos "
+	raw := "SELECT * FROM videos"
 	values := []interface{}{}
 
 	var exset bool
 	if exquery != "" {
-		raw += "WHERE title LIKE ? "
+		raw += " WHERE title LIKE ?"
 		values = append(values, "%"+exquery+"%")
 		exset = true
 	}
@@ -77,12 +77,12 @@ func queryVideos(db *gorm.DB, query string, limit int, page int) ([]models.Video
 		var prefix string
 		if i == 0 {
 			if !exset {
-				prefix = "WHERE"
+				prefix = " WHERE"
 			} else {
-				prefix = "AND"
+				prefix = " AND"
 			}
 		} else {
-			prefix = "OR"
+			prefix = " OR"
 		}
 
 		v := strings.ToLower(key)
@@ -96,7 +96,7 @@ func queryVideos(db *gorm.DB, query string, limit int, page int) ([]models.Video
 		}
 	}
 
-	raw += " ORDER BY upload_date DESC LIMIT ? OFFSET ? "
+	raw += " ORDER BY upload_date DESC LIMIT ? OFFSET ?"
 	values = append(values, limit, page*limit)
 
 	log.Println(values)
