@@ -1,0 +1,6 @@
+{{ define "_channel_search"}}
+<form action="/channels">
+	<input name="q" type="text" value="{{.query}}" autofocus placeholder="channel name">
+	<button type="submit">search</button>
+</form>
+{{ end }}

@@ -1,0 +1,32 @@
+{{define "channels"}}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{.title}}</title>
+</head>
+<body>
+	{{ template "_header" .}}
+	<h1>Channels</h1>
+	{{ template "_channel_search" .}}
+	{{ if .err }}
+		<h1>An error has occured</h1>
+		<p>{{.err}}</p>
+	{{ else }}
+		{{ if len .channels | ne 0}}
+			<table>
+			<tr>
+				<th>Name</th>
+				<th>URL</th>
+			</tr>
+			{{ range .channels }}
+			<tr>
+				<td><a href="/search?q=uploader:{{.Uploader}}">{{.Uploader}}</a></td>
+				<td><a href="{{.UploaderURL}}">{{.UploaderURL}}</a></td>
+			</tr>
+			{{ end }}
+			</table>
+		{{ end }}
+	{{ end }}
+</body>
+</html>
+{{end}}

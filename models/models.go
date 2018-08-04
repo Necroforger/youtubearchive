@@ -1,9 +1,8 @@
-package youtubearchive
+package models
 
 import (
 	"time"
 
-	"github.com/Necroforger/youtubearchive/youtubedl"
 	"github.com/jinzhu/gorm"
 )
 
@@ -13,7 +12,7 @@ type Video struct {
 
 	LastScanned time.Time
 
-	Title       string
+	Title       string `gorm:"index"`
 	Views       int
 	Likes       int
 	Thumbnail   string
@@ -22,29 +21,10 @@ type Video struct {
 	Uploader    string
 	UploaderURL string
 	UploaderID  string
-	UploadDate  string
+	UploadDate  string `gorm:"index"`
 	VideoID     string
 	Tags        []Tag
 	WebpageURL  string
-}
-
-// VideoFromYoutubedl returns a Video model from a youtube-dl video
-func VideoFromYoutubedl(v youtubedl.Video) Video {
-	return Video{
-		Title:       v.Title,
-		Views:       v.ViewCount,
-		Likes:       v.LikeCount,
-		Thumbnail:   v.Thumbnail,
-		Duration:    v.Duration,
-		Description: v.Description,
-		Uploader:    v.Uploader,
-		UploaderURL: v.UploaderURL,
-		UploaderID:  v.UploaderID,
-		UploadDate:  v.UploadDate,
-		VideoID:     v.ID,
-		Tags:        MakeTags(v.Tags),
-		WebpageURL:  v.WebpageURL,
-	}
 }
 
 // Tag is a tag

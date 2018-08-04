@@ -1,0 +1,21 @@
+{{define "home"}}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ .title }}</title>
+</head>
+<body>
+	{{ template "_header" . }}
+	<h1>Youtube metadata archive</h1>
+
+	<h2>Search</h2>
+	{{ template "_video_search" .}}
+
+	<h2>Video id</h2>
+	{{ template "_video_id_search" }}
+
+	<h2>Channels</h2>
+	{{ template "_channel_search" }}
+</body>
+</html>
+{{end}}

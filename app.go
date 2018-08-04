@@ -6,6 +6,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/Necroforger/youtubearchive/models"
+	"github.com/Necroforger/youtubearchive/util"
+
 	"github.com/Necroforger/youtubearchive/youtubedl"
 	"github.com/jinzhu/gorm"
 )
@@ -57,7 +60,7 @@ func (a *App) logMessage(v ...interface{}) {
 	)
 }
 
-func (a *App) logVideo(v Video) {
+func (a *App) logVideo(v models.Video) {
 	a.log("[video]: ", v.Title)
 }
 
@@ -71,8 +74,7 @@ func NewApp(DB *gorm.DB, opts *AppOptions) *App {
 		opts = &AppOptions{}
 	}
 
-	DB.AutoMigrate(&Video{})
-	DB.AutoMigrate(&Tag{})
+	InitDB(DB)
 
 	return &App{
 		DB:    DB,
@@ -83,10 +85,10 @@ func NewApp(DB *gorm.DB, opts *AppOptions) *App {
 
 // InsertVideo inserts a video into the database
 func (a *App) InsertVideo(v youtubedl.Video) error {
-	m := VideoFromYoutubedl(v)
+	m := util.VideoFromYoutubedl(v)
 	m.LastScanned = time.Now()
 
-	var found Video
+	var found models.Video
 	err := a.DB.Where("video_id = ?", m.VideoID).Order("created_at DESC").First(&found).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
@@ -139,7 +141,7 @@ func (a *App) DownloadURL(URL string) error {
 				if !ok {
 					break done
 				}
-				a.logVideo(VideoFromYoutubedl(v))
+				a.logVideo(util.VideoFromYoutubedl(v))
 				err := a.InsertVideo(v)
 				if err != nil {
 					a.logError(err)
@@ -168,7 +170,7 @@ func (a *App) DownloadURL(URL string) error {
 }
 
 // videoEqual returns if two videos are equal
-func videoEqual(a, b Video) bool {
+func videoEqual(a, b models.Video) bool {
 	return (a.Description == b.Description) &&
 		(a.Title == b.Title)
 }

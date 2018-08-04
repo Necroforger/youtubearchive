@@ -1,0 +1,47 @@
+{{define "search"}}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ .title }}</title>
+</head>
+<body>
+	{{ template "_header" . }}
+
+	<h1>Search</h1>
+	{{ template "_video_search" .}}
+	
+	{{ if index .pages 0 | ne -1 }}
+		<a href="/search?q={{.query}}&p={{index .pages 0}}">previous</a>
+	{{else}}
+		<span>previous</span>
+	{{ end }}
+	<a href="/search?q={{.query}}&p={{index .pages 2}}">next</a>
+
+	{{ if .err }}
+		<h1> Error: Something whent wrong </h1>
+		<p>{{.err}}</p>
+	{{ else }}
+		{{ if gt (len .videos) 0 }}
+			<table>
+				<tr>
+					<th>title</th>
+					<th>uploader</th>
+					<th>upload date</th>
+					<th>source</th>
+				</tr>
+				{{ range .videos }}
+				<tr>
+					<td>{{.Title}}</td>
+					<td>{{.Uploader}}</td>
+					<td>{{.UploadDate}}</td>
+					<td><a href="{{.WebpageURL}}">source</a></td>
+				</tr>
+				{{ end }}
+			</table>
+		{{ else }}
+			<h1>No videos found</h1>
+		{{ end }}
+	{{end}}
+</body>
+</html>
+{{end}}
