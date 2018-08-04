@@ -22,7 +22,7 @@ type Video struct {
 	UploaderURL string
 	UploaderID  string
 	UploadDate  string `gorm:"index"`
-	VideoID     string
+	VideoID     string `gorm:"index"`
 	Tags        []Tag
 	WebpageURL  string
 }
