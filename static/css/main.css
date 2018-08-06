@@ -27,3 +27,11 @@
 	display: block;
 }
 
+.video {
+	width: 500px;
+}
+
+.video pre {
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}

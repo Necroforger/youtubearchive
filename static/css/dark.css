@@ -13,8 +13,18 @@ body {
 	width: 100%;
 }
 
+.video {
+	width: 500px;
+}
+
+.video pre {
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
 .table {
-	width: 100%;
+	width: 300;
+	overflow: hidden;
 	background-color: #151515;
 }
 
