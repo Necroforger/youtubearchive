@@ -16,13 +16,19 @@
 	{{template "_header" .}}
 	<br>
 	
-	{{ if index .videos 0}}
+	{{ if not (len .videos | eq 0)}}
 	<h1>{{ (index .videos 0).Title }}</h1>
 	{{ end }}
 
 	{{template "_video_search" .}}
 
+	{{ if len .videos | eq 0 }}
+		<h1>No videos found</h1>
+		<img src="">
+	{{ else }}
 	
+	{{ end }}
+
 	{{ range .videos }}
 	<table class="video">
 		<tr>
@@ -30,6 +36,9 @@
 		</tr>
 		<tr>
 			<td><a target="_blank" href="{{.WebpageURL}}"><h3>{{.Title}}</h3></a></td>
+		</tr>
+		<tr>
+			<td><img width=480 src="{{.Thumbnail}}"></td>
 		</tr>
 		<tr>
 			<td><a target="_blank" href="{{.UploaderURL}}">{{.Uploader}}</a></td>
