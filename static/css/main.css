@@ -1,0 +1,29 @@
+/* body {
+	margin: 0px;
+	padding: 0px;
+} */
+
+.search input {
+	height: 20px;
+	width: 300px;
+	padding-left: 10px;
+}
+
+.content {
+	width: 100%;
+}
+
+.header {
+	width: 100%;
+	height: 20px;
+}
+
+.header .nav {
+	display: inline;
+}
+
+.header .settings {
+	float: right;
+	display: block;
+}
+

@@ -86,6 +86,7 @@ func (s *Server) templateFuncs() template.FuncMap {
 
 // route creates routes
 func (s *Server) route(r *chi.Mux) {
+	r.Use(s.CSSMiddleware) // Set the custom css
 	r.Get("/search", s.HandleSearch)
 	r.Get("/view", s.HandleView)
 	r.Get("/channels", s.HandleChannels)
@@ -103,8 +104,8 @@ func (s *Server) ExecuteTemplate(w http.ResponseWriter, r *http.Request, name st
 	s.tplmu.RLock()
 	defer s.tplmu.RUnlock()
 
-	if extra, ok := ctxGet(r, ctxTemplateVars).(map[string]interface{}); ok && extra != nil {
-		extendTemplateVars(extra, data)
+	if extra := ctxGetTemplateVars(r); extra != nil {
+		extendTemplateVars(*extra, &data)
 	}
 
 	err := s.templates.ExecuteTemplate(w, name, data)
@@ -114,10 +115,10 @@ func (s *Server) ExecuteTemplate(w http.ResponseWriter, r *http.Request, name st
 	return err
 }
 
-func extendTemplateVars(a map[string]interface{}, b map[string]interface{}) {
+func extendTemplateVars(a map[string]interface{}, b *map[string]interface{}) {
 	for key := range a {
-		if _, ok := b[key]; !ok {
-			b[key] = a[key]
+		if _, ok := (*b)[key]; !ok {
+			(*b)[key] = a[key]
 		}
 	}
 }

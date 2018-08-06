@@ -3,19 +3,28 @@
 <html>
 <head>
 	<title>{{ .title }}</title>
+	{{ template "_imports" . }}
 </head>
 <body>
-	{{ template "_header" . }}
-	<h1>Youtube metadata archive</h1>
+	<div class="content">
+		{{ template "_header" . }}
 
-	<h2>Search</h2>
-	{{ template "_video_search" .}}
+		<h1>Youtube metadata archive</h1>
+		<hr>
+	
+		<h2>Search</h2>
+		{{ template "_video_search" .}}
+		<hr>
+	
+		<h2>Video id</h2>
+		{{ template "_video_id_search" }}
+		<hr>
 
-	<h2>Video id</h2>
-	{{ template "_video_id_search" }}
+		<h2>Channels</h2>
+		{{ template "_channel_search" }}
+	</div>
 
-	<h2>Channels</h2>
-	{{ template "_channel_search" }}
+	{{ template "_footer" . }}
 </body>
 </html>
 {{end}}

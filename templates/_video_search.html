@@ -1,6 +1,8 @@
 {{ define "_video_search"}}
-<form action="/search">
-	<input name="q" type="text" value="{{.query}}" autofocus placeholder="query">
-	<button type="submit">search</button>
-</form>
+<div class="search">
+	<form action="/search">
+		<input name="q" type="text" value="{{.query}}" autofocus placeholder="query">
+		<button type="submit">search</button>
+	</form>
+</div>
 {{ end }}

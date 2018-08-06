@@ -1,0 +1,63 @@
+body {
+	background-color:#232323;
+	color:white;
+}
+
+.search input {
+	height: 20px;
+	width: 300px;
+	padding-left: 10px;
+}
+
+.content {
+	width: 100%;
+}
+
+.table {
+	width: 100%;
+	background-color: #151515;
+}
+
+.header {
+	width: 100%;
+	height: 20px;
+}
+
+.header .nav {
+	display: inline;
+}
+
+.header .settings {
+	float: right;
+	display: block;
+}
+
+a:visited {
+	color: white;
+}
+
+a {
+	color: white;
+}
+
+a:hover {
+	color: #00ff00;
+}
+
+a:visited {
+	color: purple;
+}
+
+.paginator .current {
+	color:#00ff00;
+}
+.paginator a {
+	color: white;
+}
+.paginator a:hover {
+	color: #00ff00;
+}
+
+.header a {
+	color: white;
+}

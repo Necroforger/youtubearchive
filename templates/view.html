@@ -1,7 +1,4 @@
 {{ define "view" }} 
-
-
-
 <html>
 <head>
 	<title>
@@ -11,45 +8,47 @@
 		Not found
 	{{- end }}
 	</title>
+	{{ template "_imports" . }}
 </head>
 <body>
-	{{template "_header" .}}
-	<br>
-	
-	{{ if not (len .videos | eq 0)}}
-	<h1>{{ (index .videos 0).Title }}</h1>
-	{{ end }}
+	<div class="content">
+		{{template "_header" .}}
+		{{ if not (len .videos | eq 0)}}
+		<h1>{{ (index .videos 0).Title }}</h1>
+		{{ end }}
 
-	{{template "_video_search" .}}
+		{{template "_video_search" .}}
 
-	{{ if len .videos | eq 0 }}
-		<h1>No videos found</h1>
-		<img src="">
-	{{ else }}
-	
-	{{ end }}
+		{{ if len .videos | eq 0 }}
+			<h1>No videos found</h1>
+			<img src="">
+		{{ else }}
+		
+		{{ end }}
 
-	{{ range .videos }}
-	<table class="video">
-		<tr>
-			<td><b>Last scanned: {{.LastScanned}}</b></td>
-		</tr>
-		<tr>
-			<td><a target="_blank" href="{{.WebpageURL}}"><h3>{{.Title}}</h3></a></td>
-		</tr>
-		<tr>
-			<td><img width=480 src="{{.Thumbnail}}"></td>
-		</tr>
-		<tr>
-			<td><a target="_blank" href="{{.UploaderURL}}">{{.Uploader}}</a></td>
-			<td>Date: {{.UploadDate}}</td>
-			<td>Likes: {{.Likes}}</td>
-		</tr>
-		<tr>
-			<td><code><pre>{{.Description}}</pre></code></td>
-		</tr>
-	</table>
-	{{ end }}
+		{{ range .videos }}
+		<table class="video">
+			<tr>
+				<td><b>Last scanned: {{.LastScanned}}</b></td>
+			</tr>
+			<tr>
+				<td class="webpage-url"><a target="_blank" href="{{.WebpageURL}}"><h3>{{.Title}}</h3></a></td>
+			</tr>
+			<tr>
+				<td><img class="thumbnail" width=480 src="{{.Thumbnail}}"></td>
+			</tr>
+			<tr>
+				<td><a target="_blank" class="uploader-url" href="{{.UploaderURL}}">{{.Uploader}}</a></td>
+				<td class="upload-date" >Date: {{.UploadDate}}</td>
+				<td class="likes" >Likes: {{.Likes}}</td>
+			</tr>
+			<tr>
+				<td class="description"><code><pre>{{.Description}}</pre></code></td>
+			</tr>
+		</table>
+		{{ end }}
+	</div>
+	{{ template "_footer" . }}
 </body>
 </html>
 {{ end }}

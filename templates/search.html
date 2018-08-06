@@ -3,40 +3,42 @@
 <html>
 <head>
 	<title>{{ .title }}</title>
+	{{ template "_imports" . }}
 </head>
 <body>
-	{{ template "_header" . }}
+	<div class="content">
+		{{ template "_header" . }}
+		<h1>Search</h1>
+		{{ template "_video_search" .}}
+		{{ template "_paginator" .paginator}}
 
-	<h1>Search</h1>
-	{{ template "_video_search" .}}
-	
-	{{ template "_paginator" .paginator}}
-
-	{{ if .err }}
-		<h1> Error: Something whent wrong </h1>
-		<p>{{.err}}</p>
-	{{ else }}
-		{{ if gt (len .videos) 0 }}
-			<table>
-				<tr>
-					<th>title</th>
-					<th>uploader</th>
-					<th>upload date</th>
-					<th>source</th>
-				</tr>
-				{{ range .videos }}
-				<tr>
-					<td><a href="/view?id={{.VideoID}}">{{.Title}}</a></td>
-					<td><a href="/search?q=uploader:{{.Uploader}}%3B">{{.Uploader}}</a></td>
-					<td>{{.UploadDate}}</td>
-					<td><a href="{{.WebpageURL}}">source</a></td>
-				</tr>
-				{{ end }}
-			</table>
+		{{ if .err }}
+			<h1> Error: Something whent wrong </h1>
+			<p>{{.err}}</p>
 		{{ else }}
-			<h1>No videos found</h1>
-		{{ end }}
-	{{end}}
+			{{ if gt (len .videos) 0 }}
+				<table class="table videos">
+					<tr>
+						<th>title</th>
+						<th>uploader</th>
+						<th>upload date</th>
+						<th>source</th>
+					</tr>
+					{{ range .videos }}
+					<tr class="video-row">
+						<td class="video-id"><a href="/view?id={{.VideoID}}">{{.Title}}</a></td>
+						<td class="uploader"><a href="/search?q=uploader:{{.Uploader}}%3B">{{.Uploader}}</a></td>
+						<td class="upload-date">{{.UploadDate}}</td>
+						<td class="webpage-url"><a href="{{.WebpageURL}}">source</a></td>
+					</tr>
+					{{ end }}
+				</table>
+			{{ else }}
+				<h1>No videos found</h1>
+			{{ end }}
+		{{end}}
+	</div>
+	{{ template "_footer" . }}
 </body>
 </html>
 {{end}}

@@ -25,6 +25,7 @@ var (
 	dbpath = flag.String("db", "", "path to the database sqlite3 file")
 	addr   = flag.String("addr", ":80", "address to bind to")
 	tpldir = flag.String("templates", "./templates/*", "directory containing site templates")
+	static = flag.String("static", "./static", "directory containing static files")
 )
 
 func main() {
@@ -54,6 +55,7 @@ func main() {
 	)
 	r.Mount("/", s.GetRoutes())
 
+	http.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.Dir(*static))))
 	http.Handle("/", r)
 	log.Fatal(http.ListenAndServe(*addr, nil))
 }

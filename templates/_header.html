@@ -1,5 +1,13 @@
 {{ define "_header" }}
-<a href="/">[home]</a>
-<a href="/search">[search]</a>
-<a href="/channels">[channels]</a>
+<div class="header">
+	<div class="nav">
+		<a href="/">[home]</a>
+		<a href="/search">[search]</a>
+		<a href="/channels">[channels]</a>
+	</div>
+	<div class="settings">
+		<a href="" onclick="setCSS('dark.css');">[dark theme]</a>
+		<a href="" onclick="setCSS('main.css');">[light theme]</a>
+	</div>
+</div>
 {{ end }}
