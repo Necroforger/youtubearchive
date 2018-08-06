@@ -1,0 +1,23 @@
+{{ define "_paginator" }}
+
+{{ if .Beginning }}
+	<a class="paginator start" href="{{.GetURL .Beginning}}">{{.Beginning}}</a>
+	<span>...</span>
+{{ end }}
+
+{{ if len .Middle | ne 1 }}
+	{{ range .Middle }}
+		{{ if $.Current | eq .}} 
+			<span class="paginator current">{{.}}</span>
+		{{ else }}
+			<a class="paginator middle {{if $.Current | eq .}}current{{end}}" href="{{$.GetURL .}}">{{.}}</a>
+		{{ end }}
+	{{ end }}
+{{ end }}
+
+{{ if .Ending}}
+	<span>...</span>
+	<a class="paginator end" href="{{.GetURL .Ending}}">{{.Ending}}</a>
+{{ end }}
+
+{{ end }}

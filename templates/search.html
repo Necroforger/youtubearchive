@@ -10,12 +10,7 @@
 	<h1>Search</h1>
 	{{ template "_video_search" .}}
 	
-	{{ if index .pages 0 | ne -1 }}
-		<a href="/search?q={{.query}}&p={{index .pages 0}}">previous</a>
-	{{else}}
-		<span>previous</span>
-	{{ end }}
-	<a href="/search?q={{.query}}&p={{index .pages 2}}">next</a>
+	{{ template "_paginator" .paginator}}
 
 	{{ if .err }}
 		<h1> Error: Something whent wrong </h1>
@@ -31,8 +26,8 @@
 				</tr>
 				{{ range .videos }}
 				<tr>
-					<td>{{.Title}}</td>
-					<td>{{.Uploader}}</td>
+					<td><a href="/view?id={{.VideoID}}">{{.Title}}</a></td>
+					<td><a href="/search?q=uploader:{{.Uploader}}%3B">{{.Uploader}}</a></td>
 					<td>{{.UploadDate}}</td>
 					<td><a href="{{.WebpageURL}}">source</a></td>
 				</tr>

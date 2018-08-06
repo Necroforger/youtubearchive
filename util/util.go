@@ -29,6 +29,7 @@ func VideoFromYoutubedl(v youtubedl.Video) models.Video {
 // ParseTags parses a given text into ':' separated tags
 // So that "uploader:name blah" will return
 // "blah", {"uploader": "name"}, [uploader]
+// words are split by semicolons ";"
 func ParseTags(data string) (string, map[string]string, []string) {
 	words := strings.Split(data, ";")
 	unextracted := []string{}

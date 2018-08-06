@@ -1,10 +1,46 @@
 {{ define "view" }} 
+
+
+
 <html>
 <head>
-	<title>{{ .title }}</title>
+	<title>
+	{{- if len .videos | ne 0 }}
+		{{ (index .videos 0).Title }}
+	{{- else }}
+		Not found
+	{{- end }}
+	</title>
 </head>
 <body>
 	{{template "_header" .}}
+	<br>
+	
+	{{ if index .videos 0}}
+	<h1>{{ (index .videos 0).Title }}</h1>
+	{{ end }}
+
+	{{template "_video_search" .}}
+
+	
+	{{ range .videos }}
+	<table class="video">
+		<tr>
+			<td><b>Last scanned: {{.LastScanned}}</b></td>
+		</tr>
+		<tr>
+			<td><a target="_blank" href="{{.WebpageURL}}"><h3>{{.Title}}</h3></a></td>
+		</tr>
+		<tr>
+			<td><a target="_blank" href="{{.UploaderURL}}">{{.Uploader}}</a></td>
+			<td>Date: {{.UploadDate}}</td>
+			<td>Likes: {{.Likes}}</td>
+		</tr>
+		<tr>
+			<td><code><pre>{{.Description}}</pre></code></td>
+		</tr>
+	</table>
+	{{ end }}
 </body>
 </html>
 {{ end }}
