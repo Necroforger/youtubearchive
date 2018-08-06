@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -145,7 +144,6 @@ func buildVideosQuery(query string, limit, page int) (string, []interface{}) {
 		}
 	}
 
-	fmt.Println(raw)
 	return raw, values
 }
 
