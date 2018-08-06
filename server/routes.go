@@ -153,7 +153,7 @@ func getVideosByVideoID(db *gorm.DB, ID string, limit, page int) ([]models.Video
 	err := db.Where("video_id = ?", ID).
 		Limit(limit).
 		Offset(page * limit).
-		Order("last_updated DESC").
+		Order("last_scanned DESC").
 		Find(&videos).
 		Error
 
