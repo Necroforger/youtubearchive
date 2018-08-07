@@ -26,27 +26,34 @@
 		
 		{{ end }}
 
-		{{ range .videos }}
-		<table class="video">
-			<tr>
-				<td><b>Last scanned: {{.LastScanned}}</b></td>
-			</tr>
-			<tr>
-				<td class="webpage-url"><a target="_blank" href="{{.WebpageURL}}"><h3>{{.Title}}</h3></a></td>
-			</tr>
-			<tr>
-				<td><img class="thumbnail" width=480 src="{{.Thumbnail}}"></td>
-			</tr>
-			<tr>
-				<td><a target="_blank" class="uploader-url" href="{{.UploaderURL}}">{{.Uploader}}</a></td>
-				<td class="upload-date" >Date: {{.UploadDate}}</td>
-				<td class="likes" >Likes: {{.Likes}}</td>
-			</tr>
-			<tr>
-				<td colspan="3" class="description"><code><pre>{{.Description}}</pre></code></td>
-			</tr>
-		</table>
-		{{ end }}
+		<div class="view-videos">
+			{{ range .videos }}
+			<table class="video">
+				<tr>
+					<td><b>Last scanned: {{.LastScanned}}</b></td>
+				</tr>
+				<tr>
+					<td class="webpage-url"><a target="_blank" href="{{.WebpageURL}}"><h3>{{.Title}}</h3></a></td>
+				</tr>
+				<tr>
+					<!-- <td><img class="thumbnail" width=480 src="{{.Thumbnail}}"></td> -->
+					<td><iframe width="455" height="256" src="https://www.youtube.com/embed/{{.VideoID}}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></td>
+				</tr>
+				<tr>
+					<td><a target="_blank" class="uploader-url" href="{{.UploaderURL}}">{{.Uploader}}</a></td>
+					<td class="upload-date" ><b>Date:</b> {{.UploadDate}}</td>
+					<td class="likes" >Likes: {{.Likes}}</td>
+				</tr>
+				<tr>
+					<td colspan="2"><b>Thumbnail: </b> <a href="{{.Thumbnail}}">{{.Thumbnail}}</a></td>
+					<td><b>Views: </b>{{.Views}}</td>
+				</tr>
+				<tr>
+					<td colspan="3" class="description"><code><pre>{{.Description}}</pre></code></td>
+				</tr>
+			</table>
+			{{ end }}
+		</div>
 	</div>
 	{{ template "_footer" . }}
 </body>

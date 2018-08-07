@@ -4,13 +4,24 @@
 } */
 
 .search input {
-	height: 20px;
+	/* height: 20px; */
 	width: 300px;
 	padding-left: 10px;
 }
 
 .content {
 	width: 100%;
+}
+
+.view-videos {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.video {
+	width: 600px;
+	margin-bottom: 20px;
+	margin-right: 30px;
 }
 
 .header {
