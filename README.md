@@ -87,12 +87,13 @@ Once its running connect to http://localhost:80 in your browser
 
 ## Flags
 
-| Flag      | Description                                            |
-|-----------|--------------------------------------------------------|
-| db        | Path to database file                                  |
-| templates | directory in which templates are stored                |
-| static    | directory containing static files (default "./static") |
-| addr      | address to bind to (default ":80")                     |
+| Flag      | Description                                                           |
+|-----------|-----------------------------------------------------------------------|
+| db        | Path to database file                                                 |
+| templates | directory in which templates are stored                               |
+| static    | directory containing static files (default "./static")                |
+| addr      | address to bind to (default ":80")                                    |
+| pass      | password required to log into the server. Leave blank for no password |
 
 ## Screenshots
 
