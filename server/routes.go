@@ -2,8 +2,10 @@ package server
 
 import (
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/Necroforger/youtubearchive/models"
 	"github.com/Necroforger/youtubearchive/util"
@@ -23,6 +25,7 @@ const (
 	tplView     = "view"
 	tplHome     = "home"
 	tplChannels = "channels"
+	tplLogin    = "login"
 )
 
 func getSearchParams(r *http.Request) (query string, limit int, page int) {
@@ -246,4 +249,34 @@ func (s *Server) HandleChannels(w http.ResponseWriter, r *http.Request) {
 		"err":       reterror,
 		"paginator": NewPaginator(page, total, 31, query, limit, "/channels"),
 	})
+}
+
+// LoginHandler handles logins
+func (s *Server) LoginHandler(w http.ResponseWriter, r *http.Request) {
+	s.ExecuteTemplate(w, r, tplLogin, map[string]interface{}{
+		"title":    "login",
+		"redirect": r.FormValue("redirect"),
+	})
+}
+
+// LoginHandlerPost ...
+func (s *Server) LoginHandlerPost(w http.ResponseWriter, r *http.Request) {
+	http.SetCookie(w, &http.Cookie{
+		Name:  "password",
+		Value: r.FormValue("password"),
+	})
+	redir := r.FormValue("redirect")
+	if redir == "" {
+		redir = "/login"
+	}
+	http.Redirect(w, r, redir, http.StatusFound)
+}
+
+// LogoutHandler logs out
+func (s *Server) LogoutHandler(w http.ResponseWriter, r *http.Request) {
+	http.SetCookie(w, &http.Cookie{
+		Name:    "password",
+		Expires: time.Now().Add(time.Hour * -500),
+	})
+	http.Redirect(w, r, "/login?redirect="+url.QueryEscape(r.FormValue("redirect")), http.StatusFound)
 }

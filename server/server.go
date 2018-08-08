@@ -16,9 +16,10 @@ import (
 
 // Server serves the database
 type Server struct {
-	DB     *gorm.DB
-	router *chi.Mux
-	Logger io.Writer
+	DB       *gorm.DB
+	router   *chi.Mux
+	Logger   io.Writer
+	Password string
 
 	tplmu     sync.RWMutex
 	templates *template.Template
@@ -32,12 +33,28 @@ func (s *Server) Log(data ...interface{}) {
 	fmt.Fprintln(s.Logger, data...)
 }
 
+// Options are optional server parameters
+type Options struct {
+	Password string
+}
+
+// NewOptions ...
+func NewOptions() *Options {
+	return &Options{
+		Password: "",
+	}
+}
+
 // NewServer creates and initializes a new server
-func NewServer(DB *gorm.DB) *Server {
+func NewServer(DB *gorm.DB, opts *Options) *Server {
+	if opts == nil {
+		opts = NewOptions()
+	}
 	youtubearchive.InitDB(DB)
 	s := &Server{
-		DB:     DB,
-		router: chi.NewMux(),
+		DB:       DB,
+		router:   chi.NewMux(),
+		Password: opts.Password,
 	}
 	s.route(s.router)
 	return s
@@ -87,11 +104,21 @@ func (s *Server) templateFuncs() template.FuncMap {
 // route creates routes
 func (s *Server) route(r *chi.Mux) {
 	r.Use(s.CSSMiddleware) // Set the custom css
-	r.Get("/search", s.HandleSearch)
-	r.Get("/view", s.HandleView)
-	r.Get("/channels", s.HandleChannels)
-	r.Get("/", s.HandleHome)
-	r.HandleFunc("/*", s.HandleHome)
+
+	r.Get("/login", s.LoginHandler)
+	r.Post("/login", s.LoginHandlerPost)
+
+	r.Group(func(r chi.Router) {
+		if s.Password != "" {
+			r.Use(s.AuthMiddleware)
+			r.Get("/logout", s.LogoutHandler)
+		}
+		r.Get("/search", s.HandleSearch)
+		r.Get("/view", s.HandleView)
+		r.Get("/channels", s.HandleChannels)
+		r.Get("/", s.HandleHome)
+		r.HandleFunc("/*", s.HandleHome)
+	})
 }
 
 // GetRoutes returns this router

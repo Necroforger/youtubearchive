@@ -26,6 +26,7 @@ var (
 	addr   = flag.String("addr", ":80", "address to bind to")
 	tpldir = flag.String("templates", "./templates/*", "directory containing site templates")
 	static = flag.String("static", "./static", "directory containing static files")
+	pass   = flag.String("pass", "", "password required to enter server, leave blank to not require one")
 )
 
 func main() {
@@ -41,7 +42,9 @@ func main() {
 	}
 	defer db.Close()
 
-	s := server.NewServer(db)
+	s := server.NewServer(db, &server.Options{
+		Password: *pass,
+	})
 	err = s.LoadTemplatesGlob(*tpldir)
 	if err != nil {
 		log.Fatal(err)

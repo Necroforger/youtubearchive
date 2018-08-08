@@ -6,6 +6,9 @@
 		<a href="/channels">[channels]</a>
 	</div>
 	<div class="settings">
+		{{- if .loggedin }}
+			<a href="/logout?redirect={{.redirect}}">[logout]</a>
+		{{- end }}
 		<a href="" onclick="setCSS('dark.css');">[dark theme]</a>
 		<a href="" onclick="setCSS('main.css');">[light theme]</a>
 	</div>
