@@ -10,6 +10,7 @@
 		{{ template "_header" .}}
 		<h1>Channels</h1>
 		{{ template "_channel_search" .}}
+		{{ template "_paginator" .paginator }}
 		{{ if .err }}
 			<h1>An error has occured</h1>
 			<p>{{.err}}</p>
@@ -29,6 +30,7 @@
 				</table>
 			{{ end }}
 		{{ end }}
+		{{ template "_paginator" .paginator}}
 	</div>
 	{{ template "_footer" . }}
 </body>
