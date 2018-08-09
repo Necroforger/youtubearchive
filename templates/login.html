@@ -6,12 +6,15 @@
 	{{ template "_imports" . }}
 </head>
 <body>
-	{{ template "_header" . }}
-	<form action="/login" enctype="application/x-www-form-urlencoded" method="POST">
-		<input type="password" name="password">
-		<input name="redirect" type="hidden" value="{{.redirect}}">
-		<button type="submit">Login</button>
-	</form>
+	<div class="content">
+		{{ template "_header" . }}
+		<form class="login-field" action="/login" enctype="application/x-www-form-urlencoded" method="POST">
+			<input type="password" name="password">
+			<input name="redirect" type="hidden" value="{{.redirect}}">
+			<button type="submit">Login</button>
+		</form>
+		{{ template "_footer" . }}
+	</div>
 </body>
 </html>
 {{ end }}
