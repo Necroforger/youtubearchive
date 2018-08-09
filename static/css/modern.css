@@ -1,0 +1,143 @@
+/* A "modern" css theme with lots of padding */
+
+body {
+	background-color: white;
+}
+
+h1 {
+	font-family: 'Roboto', sans-serif;
+}
+
+.videos th, .channels th {
+	font-family: 'Roboto', sans-serif;
+}
+
+td a:hover {
+	color: #737373;
+}
+
+.header {
+	height: 30px;
+}
+
+.login-field button[type="submit"] {
+	height: 27px;
+}
+
+.login-field {
+	margin-left: auto;
+	margin-right: auto;
+	width: 500px;
+}
+
+.login-field input {
+	margin-left: auto;
+	margin-right: auto;
+	width: 300px;
+}
+
+.video {
+	margin-left: auto;
+	margin-right: auto;
+	border-top: 1px solid #e6e6e6;
+	border-bottom: 1px solid #e6e6e6;
+}
+
+.header a {
+	text-decoration: none;
+	padding: 10px;
+	color: black;
+}
+
+.header a:hover {
+	background-color: #e6e6e6;
+}
+
+.content {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	width: 1000px;
+}
+
+.paginator {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.search {
+	width: 700px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.search input[type="text"] {
+	width: 600px;
+	height: 38px;
+	border: none;
+	padding: 0px;
+	outline: 1px solid #e6e6e6;
+	margin: 0px;
+	padding-left: 5px;
+}
+
+.videos, .channels {
+  border-collapse: collapse;
+	text-align: left;
+	width: 100%;
+	margin-top: 20px;
+}
+
+.videos a {
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.paginator a {
+	color: black;
+}
+
+
+.videos a, .channels a {
+	color: black;
+}
+
+.videos td, .channels td {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.view-videos {
+	margin-top: 20px;
+}
+
+.videos tr:nth-child(odd), .channels tr:nth-child(odd) {
+	background-color: #e6e6e6;
+}
+
+button[type="submit"] {
+	height: 38px;
+	width: 75px;
+	border: none;
+	background-color: #e6e6e6;
+}
+
+th {
+	text-transform: capitalize;
+}
+
+.video pre {
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+.header .nav {
+	float: left;
+}
+
+.header .settings {
+	float: right;
+}
