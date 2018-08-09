@@ -1,0 +1,164 @@
+/* A "modern" css theme with lots of padding */
+
+body {
+	background-color: #232323;
+	color:  white;
+}
+
+h1 {
+	font-family: 'Roboto', sans-serif;
+}
+
+.videos th, .channels th {
+	font-family: 'Roboto', sans-serif;
+}
+
+td a:hover {
+	color: #737373;
+}
+
+.header {
+	height: 30px;
+}
+
+.login-field button[type="submit"] {
+	height: 27px;
+}
+
+.login-field {
+	margin-left: auto;
+	margin-right: auto;
+	width: 500px;
+}
+
+.login-field input {
+	margin-left: auto;
+	margin-right: auto;
+	width: 300px;
+}
+
+td iframe {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.video {
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #1f1f1f;
+}
+
+.header a {
+	text-decoration: none;
+	padding: 10px;
+	color: white;
+	background-color: #313131;
+}
+
+.header a:hover {
+	background-color: #ffffff;
+	color: black;
+}
+
+.content {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	width: 1000px;
+}
+
+.paginator {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.search {
+	width: 700px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.search input[type="text"] {
+	width: 600px;
+	height: 38px;
+	border: none;
+	padding: 0px;
+	outline: 1px solid #212121;
+	margin: 0px;
+	background-color: #313131;
+	padding-left: 5px;
+	color:  white;
+}
+
+.videos, .channels {
+  border-collapse: collapse;
+	text-align: left;
+	width: 100%;
+	margin-top: 20px;
+}
+
+.td a:visited {
+	color: #a1b8e8;
+}
+
+.videos a {
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.paginator a {
+	color: white;
+}
+
+
+.videos a, .channels a {
+	color: white;
+}
+
+.videos td, .channels td {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.view-videos {
+	margin-top: 20px;
+}
+
+.videos tr:nth-child(odd), .channels tr:nth-child(odd) {
+	background-color: #313131;
+}
+
+button[type="submit"] {
+	height: 38px;
+	width: 75px;
+	border: none;
+	background-color: #ffffff;
+}
+
+th {
+	text-transform: capitalize;
+}
+
+.video pre {
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+.header .nav {
+	float: left;
+}
+
+.video a {
+	color: #7171ff;
+}
+
+.video a:hover {
+	color: #8ab0ff;
+}
+
+.header .settings {
+	float: right;
+}
