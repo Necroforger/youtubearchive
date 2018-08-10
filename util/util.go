@@ -38,7 +38,7 @@ func ParseTags(data string) (string, map[string]string, []string) {
 
 	for _, word := range words {
 		if strings.Contains(word, ":") {
-			parts := strings.Split(word, ":")
+			parts := strings.SplitN(word, ":", 2)
 			if len(parts) > 1 {
 				extracted[parts[0]] = parts[1]
 				keys = append(keys, parts[0])
