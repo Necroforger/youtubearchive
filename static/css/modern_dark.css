@@ -113,6 +113,9 @@ td iframe {
 	color: white;
 }
 
+hr {
+	display: none;
+}
 
 .videos a, .channels a {
 	color: white;

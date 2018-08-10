@@ -16,6 +16,10 @@ td a:hover {
 	color: #737373;
 }
 
+hr {
+	display: none;
+}
+
 .header {
 	height: 30px;
 }
