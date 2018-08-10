@@ -45,14 +45,16 @@ td iframe {
 .video {
 	margin-left: auto;
 	margin-right: auto;
-	background-color: #1f1f1f;
+	/* background-color: #1f1f1f; */
+	border-top: 1px solid #353535;
+	border-bottom: 1px solid #353535;
 }
 
 .header a {
 	text-decoration: none;
 	padding: 10px;
 	color: white;
-	background-color: #313131;
+	/* background-color: #313131; */
 }
 
 .header a:hover {

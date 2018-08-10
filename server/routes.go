@@ -91,6 +91,34 @@ func countVideos(db *gorm.DB, query string, limit, page int) (int, error) {
 	return count, err
 }
 
+func buildParts(field, prefix, value string) (raw string, values []interface{}) {
+	parts := strings.Split(value, ",")
+	for i := 0; i < len(parts); i++ {
+		negate := func() string {
+			if strings.HasPrefix(parts[i], "!") {
+				parts[i] = strings.TrimPrefix(parts[i], "!")
+				return " NOT"
+			}
+			return ""
+		}
+		if i == 0 {
+			raw += prefix + " (" + field + negate() + " LIKE ?"
+		} else {
+			if strings.HasPrefix(parts[i], "||") {
+				parts[i] = strings.TrimPrefix(parts[i], "||")
+				raw += " OR " + field + " LIKE ?"
+			} else {
+				raw += " AND " + field + negate() + " LIKE ?"
+			}
+		}
+		values = append(values, "%"+parts[i]+"%")
+	}
+	if len(parts) != 0 {
+		raw += ")"
+	}
+	return
+}
+
 func buildVideosQuery(query string, limit, page int) (string, []interface{}) {
 	exquery, tags, keys := util.ParseTags(query)
 
@@ -116,24 +144,19 @@ func buildVideosQuery(query string, limit, page int) (string, []interface{}) {
 			prefix = " AND"
 		}
 
+		addParts := func(r string, i []interface{}) {
+			raw += r
+			values = append(values, i...)
+		}
+
 		v := strings.ToLower(key)
 		switch v {
 		case "uploader":
-			raw += prefix + " uploader LIKE ?"
-			values = append(values, "%"+tags[key]+"%")
+			addParts(buildParts("uploader", prefix, tags[key]))
 		case "description":
-			raw += prefix + " description LIKE ?"
-			values = append(values, "%"+tags[key]+"%")
+			addParts(buildParts("description", prefix, tags[key]))
 		case "title":
-			parts := strings.Split(tags[key], ",")
-			for i := 0; i < len(parts); i++ {
-				if i == 0 {
-					raw += prefix + " title LIKE ?"
-				} else {
-					raw += " AND title LIKE ?"
-				}
-				values = append(values, "%"+parts[i]+"%")
-			}
+			addParts(buildParts("title", prefix, tags[key]))
 		}
 	}
 
