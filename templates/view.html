@@ -40,7 +40,8 @@
 					<td colspan="3"><iframe width="455" height="256" src="https://www.youtube.com/embed/{{.VideoID}}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></td>
 				</tr>
 				<tr>
-					<td><a target="_blank" class="uploader-url" href="{{.UploaderURL}}">{{.Uploader}}</a></td>
+					<!-- <td><a target="_blank" class="uploader-url" href="{{.UploaderURL}}">{{.Uploader}}</a></td> -->
+					<td><a href="/search?q=uploader:{{.Uploader}}%3B">{{.Uploader}}</a><a target="_blank" href="{{.UploaderURL}}"> (source)</a></td>
 					<td class="upload-date" ><b>Date:</b> {{.UploadDate}}</td>
 					<td class="likes" >Likes: {{.Likes}}</td>
 				</tr>
