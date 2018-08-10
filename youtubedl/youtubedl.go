@@ -15,6 +15,7 @@ const (
 	ytDumpJSON      = "--dump-json"
 	ytPlaylistStart = "--playlist-start"
 	ytPlaylistEnd   = "--playlist-end"
+	ytIgnoreErrors  = "-i"
 )
 
 // doYoutubledl executes youtubedl and calls the supplied callback function with the
@@ -149,7 +150,7 @@ func ExtractPlaylistInfo(URL string, opts *ExtractOpts, videos chan Video, errc 
 }
 
 func createExtractArgs(URL string, opts *ExtractOpts, start, end int) []string {
-	args := []string{ytDumpJSON}
+	args := []string{ytDumpJSON, ytIgnoreErrors}
 	if opts.Count > 1 {
 		args = append(args, // If the playlist is a definite size, specify start and end
 			ytPlaylistStart, strconv.Itoa(start+1),
