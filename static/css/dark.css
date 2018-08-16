@@ -12,6 +12,10 @@ body {
 	width: 100%;
 }
 
+.video a {
+	color: #6565f5;
+}
+
 .view-videos {
 	display: flex;
 	flex-wrap: wrap;
