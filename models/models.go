@@ -18,7 +18,7 @@ type Video struct {
 	Thumbnail   string
 	Duration    int
 	Description string
-	Uploader    string
+	Uploader    string `gorm:"index"`
 	UploaderURL string
 	UploaderID  string
 	UploadDate  string `gorm:"index"`
