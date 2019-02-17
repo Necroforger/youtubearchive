@@ -33,7 +33,7 @@ var (
 func initDB(db *gorm.DB) error {
 	// Create an uploaders table to speed up querying channels.
 	return db.Exec(`DROP TABLE IF EXISTS uploaders;
-CREATE TABLE uploaders AS SELECT * FROM videos GROUP BY uploader;`).Error
+CREATE TABLE uploaders AS SELECT uploader, uploader_url FROM videos GROUP BY uploader;`).Error
 }
 
 func main() {
