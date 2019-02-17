@@ -52,24 +52,18 @@ func formValueInt(r *http.Request, key string, defaultValue int) int {
 func queryChannels(db *gorm.DB, query string, limit, page int) ([]models.Video, error) {
 	var videos []models.Video
 
-	// err := db.Group("uploader").Find(&videos).Error
-	err := db.
-		Group("uploader").
-		Where("uploader LIKE ?", "%"+query+"%").
-		Limit(limit).
-		Offset(page * limit).
-		Find(&videos).Error
+	err := db.Raw(
+		"SELECT * FROM uploaders WHERE uploader LIKE ? LIMIT ? OFFSET ?",
+		"%"+query+"%",
+		limit,
+		page*limit).Scan(&videos).Error
 
 	return videos, err
 }
 
 func countChannels(db *gorm.DB, query string) (int, error) {
 	var count int
-	err := db.
-		Model(&models.Video{}).
-		Group("uploader").
-		Where("uploader LIKE ?", "%"+query+"%").
-		Count(&count).Error
+	err := db.Raw("SELECT count(*) FROM uploaders WHERE uploader LIKE ?", "%"+query+"%").Scan(&count).Error
 
 	return count, err
 }

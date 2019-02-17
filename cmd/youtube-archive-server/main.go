@@ -29,6 +29,13 @@ var (
 	pass   = flag.String("pass", "", "password required to enter server, leave blank to not require one")
 )
 
+// Create required tables
+func initDB(db *gorm.DB) {
+	// Create an uploaders table to speed up querying channels.
+	db.Exec(`DROP TABLE IF EXISTS uploaders;
+CREATE TABLE uploaders AS SELECT * FROM videos GROUP BY uploader;`)
+}
+
 func main() {
 	flag.Parse()
 
