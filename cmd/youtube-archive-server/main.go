@@ -30,10 +30,10 @@ var (
 )
 
 // Create required tables
-func initDB(db *gorm.DB) {
+func initDB(db *gorm.DB) error {
 	// Create an uploaders table to speed up querying channels.
-	db.Exec(`DROP TABLE IF EXISTS uploaders;
-CREATE TABLE uploaders AS SELECT * FROM videos GROUP BY uploader;`)
+	return db.Exec(`DROP TABLE IF EXISTS uploaders;
+CREATE TABLE uploaders AS SELECT * FROM videos GROUP BY uploader;`).Error
 }
 
 func main() {
@@ -48,6 +48,11 @@ func main() {
 		log.Fatal("Err opening database: ", err)
 	}
 	defer db.Close()
+
+	err = initDB(db)
+	if err != nil {
+		log.Fatal("Error initializing the database: ", err)
+	}
 
 	s := server.NewServer(db, &server.Options{
 		Password: *pass,
