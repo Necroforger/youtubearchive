@@ -61,6 +61,7 @@ func queryChannels(db *gorm.DB, query string, limit, page int) ([]models.Video, 
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		v := models.Video{}
