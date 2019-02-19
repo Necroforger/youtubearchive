@@ -112,14 +112,17 @@ window.addEventListener("load", function() {
 
 		let join = (x) => x.filter(x => x != "").join(" - ");
 		
-		let elements = [
-			createSearchLink(document.querySelector(".webpage-url h3").innerHTML),
-			createSearchLink(join([x.title])),
-			createSearchLink(join([x.circle, x.title])),
-			createSearchLink(join([x.circle, x.album])),
-			createSearchLink(join([x.circle, x.album, x.title])),
-		];
-		elements = elements.filter(x => !!x);
+		let elements = Array.from([
+			document.querySelector(".webpage-url h3").innerHTML,
+			join([x.title]),
+			join([x.circle, x.title]),
+			join([x.circle, x.album]),
+			join([x.circle, x.album, x.title]),
+		]
+		.reduce((x, y) => { x.set(y, true); return x}, new Map())
+		.keys())
+		.map(createSearchLink)
+		.filter(x => !!x);
 		
 		let container = document.querySelector(".search");
 		for (let e of elements) {
