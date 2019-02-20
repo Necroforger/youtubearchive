@@ -71,7 +71,7 @@ function matchGroupOr(regex, text, pos, or="") {
  * @returns {RegExp}
  */
 function newParseReg(field) {
-	let r = String.raw`^.*(\[?${field}\]?)([\s]|\.){0,30}:[\s]{0,5}([^ ].*)$`;
+	let r = String.raw`^.*(\[?${field}\]?)([\s]|\.){0,30}[:：][\s]{0,5}([^ ].*)$`;
 	return RegExp(r, 'mi');
 }
 
