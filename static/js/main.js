@@ -64,10 +64,8 @@ function matchGroupOr(regex, text, pos, or="") {
 }
 
 function newParseReg(field) {
-	let r = `^.*(\\[?${field}\\]?)([ ]|.){0,30}:[ ]{0,5}([^ ].*)$`;
+	let r = String.raw`^.*(\[?${field}\]?)([\s]|\.){0,30}:[\s]{0,5}([^ ].*)$`;
 	return RegExp(r, 'mi');
-
-	// return /(\[?Circle\]?)([ ]|\.){0,30}:[ ]{0,5}([^ ].*)$/mi;
 }
 
 /**
@@ -83,7 +81,7 @@ function parseSongInformation() {
 		}
 		
 		songInfo.title = getField("Title|Track");
-		songInfo.circle = getField("Circle");
+		songInfo.circle = getField("Circle|Performed by");
 		songInfo.album = getField("Album");
 
 		console.log(songInfo)
