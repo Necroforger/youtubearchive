@@ -11,7 +11,7 @@ function setCSS(name) {
 }
 
 // linkRegex is a regular expression for matching links
-const linkRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+const linkRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=;]*)/g;
 
 /**
  * @description Replaces all URLs in the video descriptions with hyperlinks
@@ -127,7 +127,7 @@ function makeSearchButtons() {
 
 	for (let x of songs) {
 		console.log(x);
-		
+
 		Array.from([
 			document.querySelector(".webpage-url h3").innerHTML, // include video title as a search query
 			join([x.title]),
