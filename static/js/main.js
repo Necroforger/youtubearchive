@@ -32,9 +32,9 @@ function replaceURLs() {
 */
 
 /**
+ * creates a new song info object
  * @param {String} circle
  * @param {String} title 
- * @description creates a new song info object
  * @returns {SongInfo}
  */
 function newSongInfo(circle="", title="", album="") {
@@ -46,6 +46,8 @@ function newSongInfo(circle="", title="", album="") {
 }
 
 /**
+ * @description matches a regular expression and returns subgroup at index 'pos'
+ * if the match fails, it will return 'or'
  * @param {RegExp} regex regular expression to use in matching
  * @param {String} text string to search
  * @param {Number} pos number of the capture group
@@ -63,13 +65,19 @@ function matchGroupOr(regex, text, pos, or="") {
 	return match[pos];
 }
 
+/**
+ * @description creates a regular expression for searching for song information in a video description
+ * @param {String} field field to search for
+ * @returns {RegExp}
+ */
 function newParseReg(field) {
 	let r = String.raw`^.*(\[?${field}\]?)([\s]|\.){0,30}:[\s]{0,5}([^ ].*)$`;
 	return RegExp(r, 'mi');
 }
 
 /**
- * @description parses song information from the descriptions and returns an array of song infos
+ * @description parses song information from a pages 'pre' elements and returns an array of song infos
+ * @returns {SongInfo} song information
  */
 function parseSongInformation() {
 	let songs = [];
@@ -90,6 +98,12 @@ function parseSongInformation() {
 	return songs;
 }
 
+/**
+ * @description creates a link to a youtube search for the given text
+ * will return undefined if the supplied text is ""
+ * @param {String} text text to return
+ * @returns {HTMLElement} link
+ */
 function createSearchLink(text) {
 	if (text == "") 
 		return null;
@@ -102,29 +116,34 @@ function createSearchLink(text) {
 	return link;
 }
 
-window.addEventListener("load", function() {
-	replaceURLs();
+/**
+ * @description makes links leading to youtube searches for song information
+ * parsed from video descriptions.
+ */
+function makeSearchButtons() {
 	let songs = parseSongInformation();
+	let container = document.querySelector(".search");
+	let join = x => x.filter(x => x != "").join(" - ");
+
 	for (let x of songs) {
 		console.log(x);
-
-		let join = (x) => x.filter(x => x != "").join(" - ");
 		
-		let elements = Array.from([
-			document.querySelector(".webpage-url h3").innerHTML,
+		Array.from([
+			document.querySelector(".webpage-url h3").innerHTML, // include video title as a search query
 			join([x.title]),
 			join([x.circle, x.title]),
 			join([x.circle, x.album]),
 			join([x.circle, x.album, x.title]),
 		]
-		.reduce((x, y) => { x.set(y, true); return x}, new Map())
-		.keys())
-		.map(createSearchLink)
-		.filter(x => !!x);
-		
-		let container = document.querySelector(".search");
-		for (let e of elements) {
-			container.insertAdjacentElement("afterend", e);
-		}
+		.reduce((x, y) => { x.set(y, true); return x}, new Map()) // Remove duplicates using a Map
+		.keys())               // Obtain the keys iterator and convert it to an array
+		.map(createSearchLink) // create links for each search query
+		.filter(x => !!x)      // Filter out any undefined elements
+		.forEach(x => container.insertAdjacentElement("afterend", x)); // append buttons after search form
 	}
+}
+
+window.addEventListener("load", function() {
+	replaceURLs();
+	makeSearchButtons();
 });
