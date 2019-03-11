@@ -28,9 +28,9 @@ func getFilename(directory, videoID string) string {
 }
 
 func downloadThumbnail(videoID, URL, directory string) error {
-	_, err := os.Stat(getFilename(directory, videoID))
-	if !os.IsNotExist(err) {
-		return err
+	s, err := os.Stat(getFilename(directory, videoID))
+	if !os.IsNotExist(err) || (s != nil) {
+		return ErrThumbnailAlreadyExists
 	}
 
 	// Request the image from the thumbnail URL
@@ -99,8 +99,8 @@ func main() {
 		}
 		err = downloadThumbnail(videoID, thumbnail, *thumbnailDirectory)
 		if err != nil {
-			if os.IsExist(err) {
-				fmt.Println("skipping, a file with this ID already exists")
+			if err == ErrThumbnailAlreadyExists {
+				fmt.Printf("skipping, a file with ID [%s] already exists\n", videoID)
 			} else {
 				log.Println(err)
 			}
