@@ -34,9 +34,15 @@ import (
 )
 
 var (
-	database              = kingpin.Flag("database", "the path to the sqlite database to use when performing commands").Short('d').String()
+	database              = kingpin.Flag("database", "the path to the sqlite database to use when performing commands").Short('d').Required().String()
 	updateTerminated      = kingpin.Command("update-terminated", "updates the table of terminated channels in the database")
 	updateTerminatedProcs = updateTerminated.Flag("procs", "number of http processes to execute concurrently").Short('p').Default("10").Int()
+
+	execCmd    = kingpin.Command("exec", "execute sql and print the results")
+	execCmdSQL = execCmd.Arg("sql", "sql string to execute on the database").Required().String()
+
+	terminatedCmd = kingpin.Command("get-terminated", "return a list of terminated channels and their channel URLs")
+	activeCmd     = kingpin.Command("get-active", "return a list of active channels and their channel URLs")
 )
 
 func openDatabase() *gorm.DB {
@@ -59,6 +65,12 @@ func main() {
 	switch cmd {
 	case "update-terminated":
 		updateTerminatedCmd(db)
+	case "exec":
+		execSQL(db, *execCmdSQL)
+	case "get-terminated":
+		execSQL(db, "select uploader, uploader_url from terminated_channels where terminated = 1;")
+	case "get-active":
+		execSQL(db, "select uploader, uploader_url from terminated_channels where terminated = 0;")
 	}
 	defer db.Close()
 }

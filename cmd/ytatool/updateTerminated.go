@@ -2,11 +2,20 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/Necroforger/youtubearchive/models"
 	"github.com/jinzhu/gorm"
+)
+
+var (
+	terminatedIndicators = []string{
+		"This account has been terminated because we received multiple third-party claims of copyright infringement regarding material the user posted.",
+		"This account has been terminated because",
+	}
 )
 
 // query youtube and see if it responds with a 404 to determine if a channel is terminated
@@ -16,7 +25,24 @@ func testChannelTerminated(URL string) (bool, error) {
 		return false, err
 	}
 	defer resp.Body.Close()
-	return resp.StatusCode == 404, nil
+
+	if resp.StatusCode == 404 {
+		return true, nil
+	}
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	body := string(b)
+	for _, v := range terminatedIndicators {
+		if strings.Contains(body, v) {
+			return true, nil
+		}
+	}
+
+	return false, nil
 }
 
 func updateTerminatedCmd(db *gorm.DB) {
