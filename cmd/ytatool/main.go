@@ -2,7 +2,7 @@
 package main
 ytatool performs various common database management functions for youtube-archive
 
-usage: ytatool [<flags>] <command> [<args> ...]
+usage: ytatool --database=DATABASE [<flags>] <command> [<args> ...]
 
 Flags:
       --help               Show context-sensitive help (also try --help-long and
@@ -14,11 +14,17 @@ Commands:
   help [<command>...]
     Show help.
 
-
   update-terminated [<flags>]
     updates the table of terminated channels in the database
 
-    -p, --procs=10  number of http processes to execute concurrently
+  exec <sql>
+    execute sql and print the results
+
+  get-terminated
+    return a list of terminated channels and their channel URLs
+
+  get-active
+    return a list of active channels and their channel URLs
 */
 
 package main
