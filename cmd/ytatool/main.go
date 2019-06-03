@@ -1,6 +1,24 @@
 /*
 package main
 ytatool performs various common database management functions for youtube-archive
+
+usage: ytatool [<flags>] <command> [<args> ...]
+
+Flags:
+      --help               Show context-sensitive help (also try --help-long and
+                           --help-man).
+  -d, --database=DATABASE  the path to the sqlite database to use when
+                           performing commands
+
+Commands:
+  help [<command>...]
+    Show help.
+
+
+  update-terminated [<flags>]
+    updates the table of terminated channels in the database
+
+    -p, --procs=10  number of http processes to execute concurrently
 */
 
 package main
