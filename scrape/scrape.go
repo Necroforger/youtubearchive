@@ -99,6 +99,7 @@ func GetChannelInfo(URL string) (info ChannelInfo, err error) {
 		}
 	})
 
+	// Find related channel links
 	doc.Find("[class*='related-channel'] a[title]").Each(func(_ int, s *goquery.Selection) {
 		r := Link{
 			Name: s.Text(),
@@ -107,6 +108,7 @@ func GetChannelInfo(URL string) (info ChannelInfo, err error) {
 		info.Related = append(info.Related, r)
 	})
 
+	// Find the header links at the top of the page. Usually things like twitter.
 	doc.Find("#header-links a").Each(func(_ int, s *goquery.Selection) {
 		r := Link{
 			Name: s.Text(),
