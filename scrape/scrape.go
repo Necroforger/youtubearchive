@@ -43,6 +43,8 @@ type Link struct {
 
 // ChannelInfo contains various channel information and statistics
 type ChannelInfo struct {
+	// The URL used to scan this information
+	URL             string
 	Name            string
 	ProfileImage    string
 	BackgroundImage string
@@ -84,6 +86,8 @@ func GetChannelInfo(URL string) (info ChannelInfo, err error) {
 	if err != nil {
 		return
 	}
+
+	info.URL = URL
 
 	info.Name = doc.Find(".qualified-channel-title-text").Text()
 	info.Description = doc.Find(".about-description").First().Text()
