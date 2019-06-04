@@ -21,6 +21,7 @@ func updateChannelMetadataCmd(db *gorm.DB) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer rows.Close()
 
 	// Scam all results into array of channels
 	for rows.Next() {
