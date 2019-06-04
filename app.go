@@ -1,10 +1,14 @@
 package youtubearchive
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
+	"strconv"
 	"sync"
 	"time"
+
+	"github.com/Necroforger/youtubearchive/scrape"
 
 	"github.com/Necroforger/youtubearchive/models"
 	"github.com/Necroforger/youtubearchive/util"
@@ -173,4 +177,30 @@ func (a *App) DownloadURL(URL string) error {
 func videoEqual(a, b models.Video) bool {
 	return (a.Description == b.Description) &&
 		(a.Title == b.Title)
+}
+
+// ArchiveChannelMetadata archives the metadata of the given channel URL. Storing it in the `channel_metadata` table
+// as a string of JSON.
+// db          : sqlite database
+// uploaderURL : root URL of the uploader. /about will be appended to the end so ensure the URL is clean.
+//               this should probably be changed to something better in the future.
+func ArchiveChannelMetadata(db *gorm.DB, uploaderURL string) error {
+
+	// Scrape channel information from the about page of a channel
+	info, err := scrape.GetChannelInfo(uploaderURL + "/about")
+	if err != nil {
+		return err
+	}
+	info.URL = uploaderURL
+
+	b, err := json.Marshal(info)
+	if err != nil {
+		return err
+	}
+
+	err = db.Exec("INSERT INTO channel_metadata(created, uploader_url, json) VALUES(?, ?, ?)",
+		strconv.FormatInt(time.Now().UnixNano(), 10), uploaderURL, string(b),
+	).Error
+
+	return err
 }

@@ -172,7 +172,7 @@ func GetChannelPlaylists(URL string) (links []Link, err error) {
 // parseNumberFromStat parses a number statistic from a stat
 func parseNumberFromStat(stat string) (number int, err error) {
 	numbers := filterStr(stat, func(s rune) bool {
-		return !(s <= '0' || s >= '9')
+		return !(s < '0' || s > '9')
 	})
 	n, err := strconv.ParseInt(numbers, 10, 64)
 	return int(n), err

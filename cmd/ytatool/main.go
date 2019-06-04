@@ -34,6 +34,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/Necroforger/youtubearchive"
+
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 
 	"github.com/alecthomas/kingpin"
@@ -41,17 +43,20 @@ import (
 )
 
 var (
-	database              = kingpin.Flag("database", "the path to the sqlite database to use when performing commands").Short('d').Required().String()
-	updateTerminated      = kingpin.Command("update-terminated", "updates the table of terminated channels in the database")
+	database       = kingpin.Flag("database", "the path to the sqlite database to use when performing commands").Short('d').Required().String()
+	noTableHeaders = kingpin.Flag("no-table-headers", "do not print table headers when outputting tables").Short('q').Bool()
+
+	updateTerminated      = kingpin.Command("update-terminated", "updates the table of terminated channels in the database").Alias("ut")
 	updateTerminatedProcs = updateTerminated.Flag("procs", "number of http processes to execute concurrently").Short('p').Default("10").Int()
-	noTableHeaders        = kingpin.Flag("no-table-headers", "do not print table headers when outputting tables").Short('q').Bool()
+
+	updateChannelMetadata = kingpin.Command("update-channel-metadata", "updates the matadata information of various channels").Alias("ucm")
 
 	execCmd     = kingpin.Command("exec", "execute sql and print the results")
 	execCmdSQL  = execCmd.Arg("sql", "sql string to execute on the database").Required().String()
 	execCmdFile = execCmd.Flag("file", "file to execute sql string from").Short('f').File()
 
-	terminatedCmd = kingpin.Command("get-terminated", "return a list of terminated channels and their channel URLs")
-	activeCmd     = kingpin.Command("get-active", "return a list of active channels and their channel URLs")
+	terminatedCmd = kingpin.Command("get-terminated", "return a list of terminated channels and their channel URLs").Alias("gt")
+	activeCmd     = kingpin.Command("get-active", "return a list of active channels and their channel URLs").Alias("ga")
 )
 
 func openDatabase() *gorm.DB {
@@ -71,9 +76,17 @@ func main() {
 	cmd := kingpin.Parse()
 
 	db := openDatabase()
+	defer db.Close()
+
+	// Initialize the database, performing migrations and ensuring the necessary
+	// tables exist.
+	youtubearchive.InitDB(db)
+
 	switch cmd {
 	case "update-terminated":
 		updateTerminatedCmd(db)
+	case "update-channel-metadata":
+		updateChannelMetadataCmd(db)
 	case "exec":
 		var query string
 		if execCmdFile != nil {
@@ -93,5 +106,4 @@ func main() {
 	case "get-active":
 		execSQL(db, "select uploader, uploader_url from terminated_channels where terminated = 0;")
 	}
-	defer db.Close()
 }

@@ -16,5 +16,18 @@ func InitDB(db *gorm.DB) error {
 		return err
 	}
 
+	// Create a table for storing channel metadata as JSON
+	err = db.Exec(`
+		CREATE TABLE IF NOT EXISTS channel_metadata (
+			ID               INTEGER PRIMARY KEY,
+			created          TEXT,
+			uploader_url     TEXT,
+			json             TEXT
+		);
+	`).Error
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
