@@ -22,8 +22,11 @@ func execSQL(db *gorm.DB, query string) {
 	}
 
 	columnFormatted := strings.Join(columns, "\t")
-	fmt.Println(columnFormatted)
-	fmt.Println(strings.Repeat("-", len(columnFormatted)+4*len(columns)))
+
+	if !*noTableHeaders {
+		fmt.Println(columnFormatted)
+		fmt.Println(strings.Repeat("-", len(columnFormatted)+4*len(columns)))
+	}
 
 	// Iterate over every row and print with tab separated columns
 	for rows.Next() {

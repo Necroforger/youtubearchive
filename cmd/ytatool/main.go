@@ -30,6 +30,7 @@ Commands:
 package main
 
 import (
+	"io/ioutil"
 	"log"
 	"os"
 
@@ -43,9 +44,11 @@ var (
 	database              = kingpin.Flag("database", "the path to the sqlite database to use when performing commands").Short('d').Required().String()
 	updateTerminated      = kingpin.Command("update-terminated", "updates the table of terminated channels in the database")
 	updateTerminatedProcs = updateTerminated.Flag("procs", "number of http processes to execute concurrently").Short('p').Default("10").Int()
+	noTableHeaders        = kingpin.Flag("no-table-headers", "do not print table headers when outputting tables").Short('q').Bool()
 
-	execCmd    = kingpin.Command("exec", "execute sql and print the results")
-	execCmdSQL = execCmd.Arg("sql", "sql string to execute on the database").Required().String()
+	execCmd     = kingpin.Command("exec", "execute sql and print the results")
+	execCmdSQL  = execCmd.Arg("sql", "sql string to execute on the database").Required().String()
+	execCmdFile = execCmd.Flag("file", "file to execute sql string from").Short('f').File()
 
 	terminatedCmd = kingpin.Command("get-terminated", "return a list of terminated channels and their channel URLs")
 	activeCmd     = kingpin.Command("get-active", "return a list of active channels and their channel URLs")
@@ -72,7 +75,19 @@ func main() {
 	case "update-terminated":
 		updateTerminatedCmd(db)
 	case "exec":
-		execSQL(db, *execCmdSQL)
+		var query string
+		if execCmdFile != nil {
+			b, err := ioutil.ReadAll(*execCmdFile)
+			if err != nil {
+				query = *execCmdSQL
+			} else {
+				query = string(b)
+			}
+		}
+		if query == "" {
+			log.Fatal("no query entered")
+		}
+		execSQL(db, query)
 	case "get-terminated":
 		execSQL(db, "select uploader, uploader_url from terminated_channels where terminated = 1;")
 	case "get-active":
