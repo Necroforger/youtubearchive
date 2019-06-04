@@ -47,12 +47,21 @@ type ChannelInfo struct {
 	ProfileImage    string
 	BackgroundImage string
 	Description     string
-	HeaderLinks     []Link
-	Related         []Link
-	AllStats        []string
-	Views           int
-	Subscribers     int
-	Joined          string
+
+	// HeaderLinks stores the links that appear overlaying the background image on a channel
+	HeaderLinks []Link
+
+	// Related stores the links to related channels.
+	Related []Link
+
+	// Links are the links stored at the bottom of the page.
+	Links []Link
+
+	// AllStats contains all the stats including those that have not been parsed into their own fields.
+	AllStats    []string
+	Views       int
+	Subscribers int
+	Joined      string
 }
 
 // Subscriptions ...
@@ -111,7 +120,7 @@ func GetChannelInfo(URL string) (info ChannelInfo, err error) {
 	// Find the header links at the top of the page. Usually things like twitter.
 	doc.Find("#header-links a").Each(func(_ int, s *goquery.Selection) {
 		r := Link{
-			Name: s.Text(),
+			Name: strings.TrimSpace(s.Text()),
 			URL:  s.AttrOr("href", ""),
 		}
 		info.HeaderLinks = append(info.HeaderLinks, r)
@@ -127,6 +136,14 @@ func GetChannelInfo(URL string) (info ChannelInfo, err error) {
 			info.BackgroundImage = r[1]
 		}
 	}
+
+	// Find channel links
+	doc.Find(".about-custom-links a").Each(func(_ int, s *goquery.Selection) {
+		info.Links = append(info.Links, Link{
+			Name: strings.TrimSpace(s.Text()),
+			URL:  s.AttrOr("href", ""),
+		})
+	})
 
 	return
 }
