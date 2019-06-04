@@ -21,6 +21,7 @@ func InitDB(db *gorm.DB) error {
 		CREATE TABLE IF NOT EXISTS channel_metadata (
 			ID               INTEGER PRIMARY KEY,
 			created          TEXT,
+			updated          TEXT,
 			uploader_url     TEXT,
 			json             TEXT
 		);

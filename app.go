@@ -2,8 +2,10 @@ package youtubearchive
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
+	"log"
 	"strconv"
 	"sync"
 	"time"
@@ -15,6 +17,11 @@ import (
 
 	"github.com/Necroforger/youtubearchive/youtubedl"
 	"github.com/jinzhu/gorm"
+)
+
+// Errors
+var (
+	ErrorRowAlreadyExists = errors.New("row already exists")
 )
 
 // ErrorGroup is a group of errors
@@ -198,8 +205,29 @@ func ArchiveChannelMetadata(db *gorm.DB, uploaderURL string) error {
 		return err
 	}
 
-	err = db.Exec("INSERT INTO channel_metadata(created, uploader_url, json) VALUES(?, ?, ?)",
-		strconv.FormatInt(time.Now().UnixNano(), 10), uploaderURL, string(b),
+	var e bool
+	err = db.Raw("SELECT EXISTS(select * from channel_metadata WHERE json = ?)", string(b)).Row().Scan(&e)
+	if err != nil {
+		return err
+	}
+
+	// get the current time as a string
+	t := strconv.FormatInt(time.Now().UnixNano(), 10)
+
+	// If the row already exists, update the date it was last scanned at in the
+	// updated column.
+	if e {
+		log.Println("row already exists, updating it's updated column")
+		err = db.Exec("UPDATE channel_metadata SET updated = ? WHERE json = ?", t, string(b)).Error
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	// If new information is present, insert a new record into the database.
+	err = db.Exec("INSERT INTO channel_metadata(created, updated, uploader_url, json) VALUES(?, ?, ?, ?)",
+		t, t, uploaderURL, string(b),
 	).Error
 
 	return err
