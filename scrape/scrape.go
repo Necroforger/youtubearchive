@@ -112,6 +112,23 @@ func GetChannelInfo(URL string) (info ChannelInfo, err error) {
 	return
 }
 
+// GetChannelPlaylists returns the playlists a channel has
+func GetChannelPlaylists(URL string) (links []Link, err error) {
+	doc, err := goquery.NewDocument(URL)
+	if err != nil {
+		return
+	}
+
+	doc.Find("a[href^='/playlist?list=']").Each(func(_ int, s *goquery.Selection) {
+		links = append(links, Link{
+			Name: s.Text(),
+			URL:  s.AttrOr("href", ""),
+		})
+	})
+
+	return
+}
+
 // parseNumberFromStat parses a number statistic from a stat
 func parseNumberFromStat(stat string) (number int, err error) {
 	numbers := filterStr(stat, func(s rune) bool {

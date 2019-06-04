@@ -14,3 +14,14 @@ func TestChannelInfo(t *testing.T) {
 
 	t.Logf("%+v\n", info)
 }
+
+func TestChannelPlaylists(t *testing.T) {
+	links, err := scrape.GetChannelPlaylists("https://www.youtube.com/user/Hiiragi230/playlists")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for _, v := range links {
+		t.Log(v.Name, v.URL)
+	}
+}
