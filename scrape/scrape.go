@@ -8,6 +8,7 @@ Package scrape provides some methods for scraping information from youtube
 package scrape
 
 import (
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -26,6 +27,10 @@ You can also find playlists by using a CSS selector looking for links that look 
 /playlist?list=PLNCRTSKrIMvss_8PSICTJJxUWKUgSu2nU
 */
 
+var (
+	urlRegexp = regexp.MustCompile(`url\((.*)\)`)
+)
+
 // Subscription ...
 type Subscription struct {
 }
@@ -38,15 +43,16 @@ type Link struct {
 
 // ChannelInfo contains various channel information and statistics
 type ChannelInfo struct {
-	Name         string
-	ProfileImage string
-	Description  string
-	HeaderLinks  []Link
-	Related      []Link
-	AllStats     []string
-	Views        int
-	Subscribers  int
-	Joined       string
+	Name            string
+	ProfileImage    string
+	BackgroundImage string
+	Description     string
+	HeaderLinks     []Link
+	Related         []Link
+	AllStats        []string
+	Views           int
+	Subscribers     int
+	Joined          string
 }
 
 // Subscriptions ...
@@ -108,6 +114,17 @@ func GetChannelInfo(URL string) (info ChannelInfo, err error) {
 		}
 		info.HeaderLinks = append(info.HeaderLinks, r)
 	})
+
+	// Find channel background image
+	{
+		style := doc.Find("style").FilterFunction(func(_ int, s *goquery.Selection) bool {
+			return strings.Contains(s.Text(), "background-image")
+		}).First().Text()
+
+		if r := urlRegexp.FindStringSubmatch(style); r != nil {
+			info.BackgroundImage = r[1]
+		}
+	}
 
 	return
 }
