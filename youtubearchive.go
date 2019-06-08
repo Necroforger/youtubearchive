@@ -25,6 +25,14 @@ func InitDB(db *gorm.DB) error {
 			uploader_url     TEXT,
 			json             TEXT
 		);
+
+		-- A view of all channels most recent metadata archive
+		CREATE VIEW IF NOT EXISTS recent_channel_metadata AS
+			select * from channel_metadata where ID in (
+			select 
+				(select ID from channel_metadata where a.uploader_url = uploader_url order by created desc) as ID
+			from
+				(select uploader_url from channel_metadata group by uploader_url) a)
 	`).Error
 	if err != nil {
 		return err
