@@ -57,6 +57,10 @@ var (
 
 	terminatedCmd = kingpin.Command("get-terminated", "return a list of terminated channels and their channel URLs").Alias("gt")
 	activeCmd     = kingpin.Command("get-active", "return a list of active channels and their channel URLs").Alias("ga")
+
+	// TODO
+	downloadThumbnailCmd          = kingpin.Command("download-thumbnails", "downloads thumbnails for all the channels in the database").Alias("dt")
+	downloadThumbnailCmdDirectory = downloadThumbnailCmd.Flag("directory", "the output directory of the downloaded thumbnails").Short('d').String()
 )
 
 func openDatabase() *gorm.DB {
@@ -105,5 +109,7 @@ func main() {
 		execSQL(db, "select uploader, uploader_url from terminated_channels where terminated = 1;")
 	case "get-active":
 		execSQL(db, "select uploader, uploader_url from terminated_channels where terminated = 0;")
+	case "download-thumbnails":
+		downloadThumbnails(db, *downloadThumbnailCmdDirectory)
 	}
 }
