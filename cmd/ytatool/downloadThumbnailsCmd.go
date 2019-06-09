@@ -52,7 +52,7 @@ func downloadThumbnail(videoID, URL, directory string) error {
 }
 
 // downloadThumbnailCmd handles downloading thumbnails from the database
-func downloadThumbnails(db *gorm.DB, directory string) {
+func downloadThumbnails(db *gorm.DB, directory string, procs int) {
 	rows, err := db.Raw("select thumbnail_url, video_id from videos group by video_id").Rows()
 	if err != nil {
 		log.Fatal(err)
@@ -63,11 +63,27 @@ func downloadThumbnails(db *gorm.DB, directory string) {
 		thumbURL string
 		videoID  string
 	)
+
+	// Fill the semaphore with 'procs' tokens
+	semaphore := make(chan struct{}, procs)
+	for i := 0; i < procs; i++ {
+		semaphore <- struct{}{}
+	}
+
 	for rows.Next() {
 		if err := rows.Scan(&thumbURL, &videoID); err != nil {
 			log.Fatal("error scanning row: ", err)
 		}
 
-		downloadThumbnail(videoID, thumbURL, directory)
+		<-semaphore
+		go func(videoID, thumbURL string) {
+			downloadThumbnail(videoID, thumbURL, directory)
+			semaphore <- struct{}{}
+		}(videoID, thumbURL)
+	}
+
+	// Drain all tokens from the semaphore
+	for i := 0; i < procs; i++ {
+		<-semaphore
 	}
 }

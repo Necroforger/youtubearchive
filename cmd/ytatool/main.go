@@ -61,10 +61,11 @@ var (
 	// TODO
 	downloadThumbnailCmd          = kingpin.Command("download-thumbnails", "downloads thumbnails for all the channels in the database").Alias("dt")
 	downloadThumbnailCmdDirectory = downloadThumbnailCmd.Flag("directory", "the output directory of the downloaded thumbnails").Short('d').String()
+	downloadThumbnailCmdProcs     = downloadThumbnailCmd.Flag("procs", "the number of http processes to use when downloading thumbnails").Default("10").Short('p').Int()
 )
 
 func openDatabase() *gorm.DB {
-	if _, err := os.Stat(*database); err == os.ErrNotExist {
+	if _, err := os.Stat(*database); os.IsNotExist(err) {
 		log.Fatal("database file not found")
 	}
 
@@ -110,6 +111,6 @@ func main() {
 	case "get-active":
 		execSQL(db, "select uploader, uploader_url from terminated_channels where terminated = 0;")
 	case "download-thumbnails":
-		downloadThumbnails(db, *downloadThumbnailCmdDirectory)
+		downloadThumbnails(db, *downloadThumbnailCmdDirectory, *downloadThumbnailCmdProcs)
 	}
 }
