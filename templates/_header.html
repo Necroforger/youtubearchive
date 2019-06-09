@@ -9,10 +9,11 @@
 		{{- if .loggedin }}
 			<a href="/logout?redirect={{.redirect}}">[logout]</a>
 		{{- end }}
-		<a href="" onclick="setCSS('dark.css');">[dark theme]</a>
-		<a href="" onclick="setCSS('main.css');">[light theme]</a>
-		<a href="" onclick="setCSS('modern_dark.css');">[modern_dark theme]</a>
-		<a href="" onclick="setCSS('modern.css');">["modern" theme]</a>
+		<a href="" onclick="setCSS('dark.css');">[dark]</a>
+		<a href="" onclick="setCSS('light.css');">[light]</a>"
+		<a href="" onclick="setCSS('main.css');">[default]</a>
+		<a href="" onclick="setCSS('modern_dark.css');">[modern_dark]</a>
+		<a href="" onclick="setCSS('modern.css');">[modern light]</a>
 	</div>
 </div>
 {{ end }}
