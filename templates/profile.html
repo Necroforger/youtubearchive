@@ -1,0 +1,73 @@
+{{define "profile"}}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ .title }}</title>
+	{{ template "_imports" . }}
+</head>
+<body>
+	<div class="content">
+    {{ template "_header" . }}
+    {{template "_video_search" .}}
+
+    {{ if not .channel }}
+    <h1>The channel could not be found</h1>
+    <iframe width="500" height="300" src="https://www.youtube.com/embed/cvBwKXJNnrw?list=LLB3Y2Dd44tv5JtUf26qgmGw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    {{ else }}
+      <div class="profile-background">
+        <img src="{{ .channel.BackgroundImage }}">
+      </div>
+      <div class="profile-content">
+        <div class="flex">
+          <div>
+            <img class="profile-avatar" src="{{ .channel.ProfileImage}}">
+            <h2 class="profile-name">{{ .channel.Name }}</h2>
+          </div>
+          <div class="profile-sections">
+              <div class="profile-section">
+                <span class="label">Stats</span>
+                <ul class="profile-stats">
+                  {{range .channel.AllStats}}
+                  <li> {{.}}</li>
+                  {{end}}
+                </ul>
+              </div>
+      
+              <div class="profile-section">
+                <span class="label">Links</span>
+                <ul>
+                    {{range .channel.HeaderLinks }}
+                    <li><a class="header-link" href="{{.URL}}">{{.Name}}</a></li>
+                    {{end}}
+                </ul>
+              </div>
+      
+              <div class="profile-section">
+                <span class="label">Related channels</span>
+                <ol class="related-channels">
+                  {{ range .channel.Related }}
+                  <li><a class="related-channel" href="/profile?id=http://www.youtube.com{{.URL}}">{{.Name}}</a></li>
+                  {{ end }}
+                </ol>
+              </div>
+          </div>
+        </div>
+
+        <a class="profile-link" href="{{.channel.URL}}">{{.channel.URL}}</a>
+        <a class="profile-videos-link" href="/search?q=uploader:{{.channel.Name}}%3B">[ videos ]</a>
+
+        <code class="profile-description">
+          <pre>{{- trim .channel.Description -}}</pre>
+        </code>
+        <ol class="profile-footer-links">
+            {{ range .channel.Links }}
+            <a class="profile-footer-link" href="{{.URL}}">{{.Name}}</a>
+            {{ end }}
+          </ol>
+      </div>
+    {{ end }}
+	</div>
+	{{ template "_footer" . }}
+</body>
+</html>
+{{end}}
