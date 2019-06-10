@@ -37,7 +37,7 @@
                 <span class="label">Links</span>
                 <ul>
                     {{range .channel.HeaderLinks }}
-                    <li><a class="header-link" href="{{.URL}}">{{.Name}}</a></li>
+                    <li><a class="header-link" href="{{.URL}}">{{if "" | eq .Name }}{{.URL}}{{else}}{{.Name}}{{end}}</a></li>
                     {{end}}
                 </ul>
               </div>
