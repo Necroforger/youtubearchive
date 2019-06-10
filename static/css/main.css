@@ -178,3 +178,41 @@ hr {
 h1,h2 {
 	font-family: Optima, sans-serif;
 }
+
+.profile-content {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.profile-description  {
+	width: 100%;
+}
+
+.table tr:nth-child(odd) {
+	background-color: rgb(100, 255, 255, 0.1);
+}
+
+.profile-description pre {
+	width: 100%;
+	overflow-wrap: break-word;
+	overflow: wrap;
+	white-space: pre-wrap;
+}
+
+.profile-background img {
+	width: 100%;
+	max-height: 166px;
+}
+
+.profile-sections {
+	margin-top: 10px;
+	margin-left: 30px;
+	display: flex;
+}
+
+.profile-section {
+	margin-right: 40px;
+}
+
+.flex {
+	display: flex;
+}

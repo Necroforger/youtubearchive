@@ -1,6 +1,8 @@
 package server
 
 import (
+	"encoding/json"
+	"log"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -26,6 +28,7 @@ const (
 	tplHome     = "home"
 	tplChannels = "channels"
 	tplLogin    = "login"
+	tplProfile  = "profile"
 )
 
 func getSearchParams(r *http.Request) (query string, limit int, page int) {
@@ -249,6 +252,27 @@ func (s *Server) HandleView(w http.ResponseWriter, r *http.Request) {
 func (s *Server) HandleHome(w http.ResponseWriter, r *http.Request) {
 	s.ExecuteTemplate(w, r, tplHome, map[string]interface{}{
 		"title": "home",
+	})
+}
+
+// HandleProfile fetches channel metadata information
+func (s *Server) HandleProfile(w http.ResponseWriter, r *http.Request) {
+	var (
+		id = r.FormValue(paramID)
+	)
+
+	var profile map[string]interface{}
+	var JSON string
+	err := s.DB.Raw("select json from recent_channel_metadata where uploader_url=?", id).Row().Scan(&JSON)
+	if err == nil {
+		err = json.Unmarshal([]byte(JSON), &profile)
+	} else {
+		log.Println(err)
+	}
+
+	s.ExecuteTemplate(w, r, tplProfile, map[string]interface{}{
+		"channel": profile,
+		"err":     err,
 	})
 }
 

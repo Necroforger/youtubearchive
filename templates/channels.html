@@ -20,11 +20,13 @@
 					<tr>
 						<th>Name</th>
 						<th>URL</th>
+						<th>Profile</th>
 					</tr>
 					{{ range .channels }}
 					<tr>
 						<td><a href="/search?q=uploader:{{.Uploader}}%3B">{{.Uploader}}</a></td>
 						<td><a href="{{.UploaderURL}}">{{.UploaderURL}}</a></td>
+						<td><a href="/profile?id={{.UploaderURL}}">profile</a></td>
 					</tr>
 					{{ end }}
 				</table>

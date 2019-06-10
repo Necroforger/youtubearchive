@@ -98,6 +98,7 @@ func (s *Server) templateFuncs() template.FuncMap {
 		"escape_spaces": func(text string) string {
 			return strings.Replace(text, " ", `\ `, -1)
 		},
+		"trim": strings.TrimSpace,
 	}
 }
 
@@ -116,6 +117,7 @@ func (s *Server) route(r *chi.Mux) {
 		r.Get("/search", s.HandleSearch)
 		r.Get("/view", s.HandleView)
 		r.Get("/channels", s.HandleChannels)
+		r.Get("/profile", s.HandleProfile)
 		r.Get("/", s.HandleHome)
 		r.HandleFunc("/*", s.HandleHome)
 	})
