@@ -50,7 +50,7 @@ var (
 	updateTerminatedProcs = updateTerminated.Flag("procs", "number of http processes to execute concurrently").Short('p').Default("10").Int()
 
 	updateChannelMetadata = kingpin.Command("update-channel-metadata", "updates the matadata information of various channels").Alias("ucm")
-
+66
 	execCmd     = kingpin.Command("exec", "execute sql and print the results")
 	execCmdSQL  = execCmd.Arg("sql", "sql string to execute on the database").Required().String()
 	execCmdFile = execCmd.Flag("file", "file to execute sql string from").Short('f').File()
@@ -60,7 +60,7 @@ var (
 
 	// TODO
 	downloadThumbnailCmd          = kingpin.Command("download-thumbnails", "downloads thumbnails for all the channels in the database").Alias("dt")
-	downloadThumbnailCmdDirectory = downloadThumbnailCmd.Flag("directory", "the output directory of the downloaded thumbnails").Short('d').String()
+	downloadThumbnailCmdDirectory = downloadThumbnailCmd.Flag("directory", "the output directory of the downloaded thumbnails").Short('o').String()
 	downloadThumbnailCmdProcs     = downloadThumbnailCmd.Flag("procs", "the number of http processes to use when downloading thumbnails").Default("10").Short('p').Int()
 )
 
