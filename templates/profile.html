@@ -54,7 +54,7 @@
         </div>
 
         <a class="profile-link" href="{{.channel.URL}}">{{.channel.URL}}</a>
-        <a class="profile-videos-link" href="/search?q=uploader:{{.channel.Name}}%3B">[ videos ]</a>
+        <a class="profile-videos-link" href="/search?q=uploader_url:{{.channel.URL}}%3B">[ videos ]</a>
 
         <code class="profile-description">
           <pre>{{- trim .channel.Description -}}</pre>

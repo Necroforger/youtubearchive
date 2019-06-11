@@ -28,7 +28,7 @@
 					{{ range .videos }}
 					<tr class="video-row">
 						<td class="video-id"><a href="/view?id={{.VideoID}}">{{.Title}}</a></td>
-						<td class="uploader"><a href="/search?q=uploader:{{.Uploader}}%3B">{{.Uploader}}</a></td>
+						<td class="uploader"><a href="/search?q=uploader_url:{{.UploaderURL}}%3B">{{.Uploader}}</a></td>
 						<td class="upload-date">{{.UploadDate}}</td>
 						<td class="duration">{{.Duration}}</td>
 						<td class="webpage-url"><a href="{{.WebpageURL}}">source</a></td>

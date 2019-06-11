@@ -51,6 +51,39 @@ func formValueInt(r *http.Request, key string, defaultValue int) int {
 	return n
 }
 
+func queryTerminatedChannels(db *gorm.DB, query string, limit, page int) ([]models.Video, error) {
+	var videos = []models.Video{}
+
+	rows, err := db.Raw(
+		"SELECT a.uploader, a.uploader_url FROM uploaders a INNER JOIN terminated_channels b ON a.uploader_url = b.uploader_url WHERE b.terminated=1 AND a.uploader LIKE ? LIMIT ? OFFSET ?",
+		"%"+query+"%",
+		limit,
+		page*limit).
+		Rows()
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		v := models.Video{}
+		err := rows.Scan(&v.Uploader, &v.UploaderURL)
+		if err != nil {
+			return nil, err
+		}
+		videos = append(videos, v)
+	}
+
+	return videos, err
+}
+
+func countTerminatedChannels(db *gorm.DB, query string) (int, error) {
+	var count int
+	err := db.Raw("SELECT count(*) FROM uploaders a INNER JOIN terminated_channels b ON a.uploader_url = b.uploader_url WHERE b.terminated=1 AND a.uploader LIKE ?", "%"+query+"%").Row().Scan(&count)
+
+	return count, err
+}
+
 // queryChannel gives a list of channels
 func queryChannels(db *gorm.DB, query string, limit, page int) ([]models.Video, error) {
 	var videos = []models.Video{}
@@ -179,6 +212,8 @@ func buildVideosQuery(query string, limit, page int) (string, []interface{}) {
 			addParts(buildParts("title", prefix, tags[key]))
 		case "terminated":
 			addParts(buildParts("terminated", prefix, tags[key]))
+		case "uploader_url":
+			addParts(buildParts("uploader_url", prefix, tags[key]))
 		}
 	}
 
@@ -291,6 +326,7 @@ func (s *Server) HandleProfile(w http.ResponseWriter, r *http.Request) {
 func (s *Server) HandleChannels(w http.ResponseWriter, r *http.Request) {
 	var (
 		query, limit, page = getSearchParams(r)
+		terminated         = r.FormValue("terminated") == "1"
 	)
 	if limit == 0 {
 		limit = 100
@@ -298,13 +334,26 @@ func (s *Server) HandleChannels(w http.ResponseWriter, r *http.Request) {
 
 	var reterror error
 
-	videos, err := queryChannels(s.DB, query, limit, page)
-	if err != nil {
-		reterror = err
-	}
-	total, err := countChannels(s.DB, query)
-	if err != nil {
-		reterror = err
+	var (
+		videos []models.Video
+		err    error
+		total  int
+	)
+	if !terminated {
+		videos, err = queryChannels(s.DB, query, limit, page)
+		if err != nil {
+			reterror = err
+		}
+		total, err = countChannels(s.DB, query)
+		if err != nil {
+			reterror = err
+		}
+	} else {
+		videos, err = queryTerminatedChannels(s.DB, query, limit, page)
+		if err != nil {
+			reterror = err
+		}
+
 	}
 	total = int(float64(total)/float64(limit) + 0.9)
 
