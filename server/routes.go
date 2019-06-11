@@ -133,7 +133,16 @@ func buildParts(field, prefix, value string) (raw string, values []interface{}) 
 func buildVideosQuery(query string, limit, page int) (string, []interface{}) {
 	exquery, tags, keys := util.ParseTags(query)
 
-	raw := "SELECT * FROM videos"
+	raw := "SELECT a.* FROM videos a"
+
+	// If we are querying for terminated videos, append a join statement to insert the terminated column into the results
+	for _, v := range keys {
+		if v == "terminated" {
+			raw += " INNER JOIN terminated_channels b ON a.uploader_url = b.uploader_url"
+			break
+		}
+	}
+
 	values := []interface{}{}
 
 	var exset bool
@@ -168,6 +177,8 @@ func buildVideosQuery(query string, limit, page int) (string, []interface{}) {
 			addParts(buildParts("description", prefix, tags[key]))
 		case "title":
 			addParts(buildParts("title", prefix, tags[key]))
+		case "terminated":
+			addParts(buildParts("terminated", prefix, tags[key]))
 		}
 	}
 

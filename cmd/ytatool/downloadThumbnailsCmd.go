@@ -53,7 +53,10 @@ func downloadThumbnail(videoID, URL, directory string) error {
 
 // downloadThumbnailCmd handles downloading thumbnails from the database
 func downloadThumbnails(db *gorm.DB, directory string, procs int) {
-	rows, err := db.Raw("select thumbnail_url, video_id from videos group by video_id").Rows()
+	tx := db.Begin()
+	defer tx.Commit()
+
+	rows, err := tx.Raw("select thumbnail_url, video_id from videos group by video_id").Rows()
 	if err != nil {
 		log.Fatal(err)
 	}

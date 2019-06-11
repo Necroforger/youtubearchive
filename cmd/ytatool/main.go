@@ -50,7 +50,7 @@ var (
 	updateTerminatedProcs = updateTerminated.Flag("procs", "number of http processes to execute concurrently").Short('p').Default("10").Int()
 
 	updateChannelMetadata = kingpin.Command("update-channel-metadata", "updates the matadata information of various channels").Alias("ucm")
-66
+
 	execCmd     = kingpin.Command("exec", "execute sql and print the results")
 	execCmdSQL  = execCmd.Arg("sql", "sql string to execute on the database").Required().String()
 	execCmdFile = execCmd.Flag("file", "file to execute sql string from").Short('f').File()
